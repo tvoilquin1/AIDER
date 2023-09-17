@@ -39,8 +39,8 @@ def make_request(url, headers, querystring):
         data = json.loads(response.text)
         properties = data.get('properties', [])
         if properties:
-            generic_url = f"https://www.redfin.com/city/{querystring['city']}/filter/property-type=house+condo+townhouse,min-price={querystring['price_min']},max-price={querystring['price_max']},min-beds={querystring['beds_min']},min-baths={querystring['baths_min']},include=sold-3mo"
-            return [generic_url]
+            urls = [property.get('rdc_web_url') for property in properties]
+            return urls
         else:
             return None
     else:
