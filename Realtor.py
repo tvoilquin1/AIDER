@@ -36,16 +36,23 @@ def build_request(area, min_price, max_price, min_bedrooms, min_bathrooms, min_g
 def make_request(url, headers, querystring):
     response = requests.request("GET", url, headers=headers, params=querystring)
     if response.status_code == 200:
-        return json.loads(response.text)
+        data = json.loads(response.text)
+        properties = data.get('properties', [])
+        urls = []
+        for prop in properties:
+            redfin_url = f"https://www.redfin.com/{prop['property_id']}"
+            urls.append(redfin_url)
+        return urls
     else:
         return None
 
 def main():
     area, min_price, max_price, min_bedrooms, min_bathrooms, min_garage = get_search_criteria()
     url, headers, querystring = build_request(area, min_price, max_price, min_bedrooms, min_bathrooms, min_garage)
-    response = make_request(url, headers, querystring)
-    if response is not None:
-        print(json.dumps(response, indent=4))
+    urls = make_request(url, headers, querystring)
+    if urls is not None:
+        for url in urls:
+            print(url)
     else:
         print("Failed to get response from API.")
 
