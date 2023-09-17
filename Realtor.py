@@ -48,16 +48,13 @@ def make_request(url, headers, querystring):
 
 def main():
     area, min_price, max_price, min_bedrooms, min_bathrooms, min_garage = get_search_criteria()
-    if validate_input(area, min_price, max_price, min_bedrooms, min_bathrooms, min_garage):
-        url, headers, querystring = build_request(area, min_price, max_price, min_bedrooms, min_bathrooms, min_garage)
-        urls = make_request(url, headers, querystring)
-        if urls is not None:
-            for url in urls:
-                print(url)
-        else:
-            print("Failed to get response from API.")
+    url, headers, querystring = build_request(area, min_price, max_price, min_bedrooms, min_bathrooms, min_garage)
+    urls = make_request(url, headers, querystring)
+    if urls is not None:
+        for url in urls:
+            print(url)
     else:
-        print("Invalid input.")
+        print("Failed to get response from API.")
 
 if __name__ == "__main__":
     main()
