@@ -38,11 +38,11 @@ def make_request(url, headers, querystring):
     if response.status_code == 200:
         data = json.loads(response.text)
         properties = data.get('properties', [])
-        urls = []
-        for prop in properties:
-            redfin_url = f"https://www.redfin.com/{prop['property_id']}"
-            urls.append(redfin_url)
-        return urls
+        if properties:
+            generic_url = f"https://www.redfin.com/city/{querystring['city']}/filter/property-type=house+condo+townhouse,min-price={querystring['price_min']},max-price={querystring['price_max']},min-beds={querystring['beds_min']},min-baths={querystring['baths_min']},include=sold-3mo"
+            return [generic_url]
+        else:
+            return None
     else:
         return None
 
