@@ -28,7 +28,7 @@ def build_request(area, min_price, max_price, min_bedrooms, min_bathrooms, min_g
     }
     headers = {
         'x-rapidapi-host': "realtor.p.rapidapi.com",
-        'x-rapidapi-key': getpass.getpass("Enter your RapidAPI key: ")
+        'x-rapidapi-key': "4ec7cd8216msh9f286dac0bb2dc6p182bfejsn34d7ca9d0a57"
     }
     
     return url, headers, querystring
