@@ -48,13 +48,30 @@ def make_request(url, headers, querystring):
 
 def main():
     area, min_price, max_price, min_bedrooms, min_bathrooms, min_garage = get_search_criteria()
-    url, headers, querystring = build_request(area, min_price, max_price, min_bedrooms, min_bathrooms, min_garage)
-    urls = make_request(url, headers, querystring)
-    if urls is not None:
-        for url in urls:
-            print(url)
+    if validate_input(area, min_price, max_price, min_bedrooms, min_bathrooms, min_garage):
+        url, headers, querystring = build_request(area, min_price, max_price, min_bedrooms, min_bathrooms, min_garage)
+        urls = make_request(url, headers, querystring)
+        if urls is not None:
+            for url in urls:
+                print(url)
+        else:
+            print("Failed to get response from API.")
     else:
-        print("Failed to get response from API.")
+        print("Invalid input.")
 
 if __name__ == "__main__":
     main()
+def validate_input(area, min_price, max_price, min_bedrooms, min_bathrooms, min_garage):
+    if not area or not min_price or not max_price or not min_bedrooms or not min_bathrooms or not min_garage:
+        print("All fields are required.")
+        return False
+    if not min_price.isdigit() or not max_price.isdigit() or not min_bedrooms.isdigit() or not min_bathrooms.isdigit() or not min_garage.isdigit():
+        print("Price, bedrooms, bathrooms, and garage fields must be numbers.")
+        return False
+    if int(min_price) > int(max_price):
+        print("Minimum price cannot be greater than maximum price.")
+        return False
+    if int(min_bedrooms) < 0 or int(min_bathrooms) < 0 or int(min_garage) < 0:
+        print("Bedrooms, bathrooms, and garage fields cannot be negative.")
+        return False
+    return True
