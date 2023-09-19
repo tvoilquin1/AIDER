@@ -7,11 +7,11 @@ df = pd.read_excel(r'C:\Users\tvoil\OneDrive\Desktop\Aider\FX Model.xlsx', sheet
 # Function to filter data
 def filter_data(df, region, currency, strategy):
     if region:
-        df = df[df['Region'] == region]
+        df = df[df['Region'].str.lower() == region.lower()]
     if currency:
-        df = df[df['Currency'] == currency]
+        df = df[df['Currency'].str.lower() == currency.lower()]
     if strategy:
-        df = df[df['FY24 Strategy'] == strategy]
+        df = df[df['FY24 Strategy'].str.lower() == strategy.lower()]
     return df
 
 # Streamlit web app
