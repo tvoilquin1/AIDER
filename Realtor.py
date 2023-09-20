@@ -11,7 +11,7 @@ def get_search_criteria():
     return area, max_price, min_bedrooms, min_bathrooms
 
 def build_request(area, max_price, min_bedrooms, min_bathrooms):
-    url = "https://realtor.p.rapidapi.com/properties/v3/list"
+    url = "https://rapidapi.com"
     querystring = {
         "sort":"relevance",
         "city":area,
@@ -23,15 +23,19 @@ def build_request(area, max_price, min_bedrooms, min_bathrooms):
         "baths_min":min_bathrooms
     }
     headers = {
-        'x-rapidapi-host': "realtor.p.rapidapi.com",
+        'x-rapidapi-host': "realtor-com4.p.rapidapi.com",
         'x-rapidapi-key': "4ec7cd8216msh9f286dac0bb2dc6p182bfejsn34d7ca9d0a57"
     }
     
     return url, headers, querystring
 
 def make_request(url, headers, querystring):
-    response = requests.request("GET", url, headers=headers, params=querystring)
-    if response.status_code == 200:
+    try:
+        response = requests.request("GET", url, headers=headers, params=querystring)
+        response.raise_for_status()  # Raise an exception for HTTP errors (e.g., 404, 500)
+        
+        print(response.text)
+        
         data = json.loads(response.text)
         properties = data.get('properties', [])
         if properties:
@@ -39,7 +43,14 @@ def make_request(url, headers, querystring):
             return urls
         else:
             return None
-    else:
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTP Error: {e}")
+        return None
+    except json.JSONDecodeError as e:
+        print(f"JSON Decode Error: {e}")
+        return None
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
         return None
 
 def main():
